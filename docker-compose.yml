@@ -13,6 +13,6 @@ services:
         expose:
             - '3306'
         volumes:
-            - my-db:/var/lib/mysql
+            - oktan-agc-db:/var/lib/mysql
 volumes:
     oktan-agc-db:
