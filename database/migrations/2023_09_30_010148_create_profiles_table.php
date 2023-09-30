@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unique();
+            $table->string('team')->nullable();
+            $table->string('sub_theme')->nullable();
             $table->json('members_data')->nullable();
             $table->json('institution_data')->nullable();
             $table->json('documents_data')->nullable();

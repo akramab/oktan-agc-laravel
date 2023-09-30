@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    public function updateOrCreate(Request $request) {
+    public function updateOrCreate(Request $request): JsonResponse {
         $currentUser = auth()->user();
 
         $profileDocuments = [];
@@ -32,7 +33,8 @@ class ProfileController extends Controller
             if($request->hasFile('abstract_1_document')) {
                 $abs1DocPath = $request->file('abstract_1_document')->store('profile_documents');
                 $profileDocuments[] = [
-                    'name' => 'abstract_1_document',
+                    'id' => '1',
+                    'name' => 'abstract',
                     'path' => $abs1DocPath
                 ];
             }
@@ -40,7 +42,8 @@ class ProfileController extends Controller
             if($request->hasFile('abstract_2_document')) {
                 $abs2DocPath = $request->file('abstract_2_document')->store('profile_documents');
                 $profileDocuments[] = [
-                    'name' => 'abstract_2_document',
+                    'id' => '2',
+                    'name' => 'abstract',
                     'path' => $abs2DocPath
                 ];
             }
@@ -48,7 +51,8 @@ class ProfileController extends Controller
             if($request->hasFile('work_1_document')) {
                 $work1DocPath = $request->file('work_1_document')->store('profile_documents');
                 $profileDocuments[] = [
-                    'name' => 'work_1_document',
+                    'id' => '1',
+                    'name' => 'work',
                     'path' => $work1DocPath
                 ];
             }
@@ -56,7 +60,8 @@ class ProfileController extends Controller
             if($request->hasFile('work_2_document')) {
                 $work2DocPath = $request->file('work_2_document')->store('profile_documents');
                 $profileDocuments[] = [
-                    'name' => 'work_2_document',
+                    'id' => '2',
+                    'name' => 'work',
                     'path' => $work2DocPath
                 ];
             }
@@ -76,8 +81,10 @@ class ProfileController extends Controller
             ],
             [
                 'user_id' => $currentUser->id,
-                'members_data' => json_encode($request->input('members_data')),
-                'institution_data' => json_encode($request->input('institution_data')),
+                'team' => $request->input('team'),
+                'sub_theme' => $request->input('sub_theme'),
+                'members_data' => $request->input('members_data'),
+                'institution_data' => $request->input('institution_data'),
                 'documents_data' => json_encode($profileDocuments),
             ]
         );
@@ -86,5 +93,46 @@ class ProfileController extends Controller
             'profile_id' => $profile->id,
             'message' => 'profile created or updated',
         ]);
+    }
+
+    public function get(): JsonResponse {
+        $currentUser = auth()->user();
+
+        $userProfile = Profile::query()
+            ->where('id', $currentUser->id)
+            ->first();
+
+        if (isset($userProfile)) {
+            $membersData = $userProfile->getMembersData();
+            $institutionData = $userProfile->getInstitutionData();
+            $documentsData = $userProfile->getDocumentsData();
+
+            $membersDataResp = [];
+            if(isset($membersData)) {
+                // sort by id
+                usort($membersData, function($a, $b){
+                    return strcmp($a->id, $b->id);
+                });
+                $membersDataResp = $membersData;
+            }
+
+            $institutionDataResp = null;
+            if(isset($institutionData)) {
+                $institutionDataResp = $institutionData;
+            }
+
+            $documentsDataResp = [];
+            if(isset($documentsData)) {
+                $documentsDataResp = $documentsData;
+            }
+
+            return response()->json([
+                'members' => $membersDataResp,
+                'institution' => $institutionDataResp,
+                'documents' => $documentsDataResp,
+            ]);
+        }
+
+        return response()->json();
     }
 }

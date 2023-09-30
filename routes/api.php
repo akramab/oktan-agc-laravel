@@ -28,5 +28,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::controller(ProfileController::class)->group(function () {
         Route::post('/user/profile', 'updateOrCreate')->name('user.update-or-create-profile');
+        Route::get('/user/profile', 'get')->name('user.get-profile');
     });
 });

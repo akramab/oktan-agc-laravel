@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property int $id
  * @property int $user_id
+ * @property string $team
+ * @property string $sub_theme
  * @property string $members_data
  * @property string $institution_data
  * @property string $documents_data
@@ -25,6 +27,8 @@ class Profile extends Model
      */
     protected $fillable = [
         'user_id',
+        'team',
+        'sub_theme',
         'members_data',
         'institution_data',
         'documents_data',
