@@ -13,7 +13,9 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $email
  * @property string $username
  * @property string $competition_type
+ * @property string $role
  * @property string $password
+ * @property boolean $is_payment_verified
  */
 class User extends Authenticatable
 {
@@ -28,6 +30,8 @@ class User extends Authenticatable
         'email',
         'username',
         'competition_type',
+        'is_payment_verified',
+        'role',
         'password',
     ];
 
@@ -48,6 +52,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_payment_verified' => 'boolean',
         'password' => 'hashed',
     ];
 }

@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('email')->unique();
             $table->string('username')->unique();
-            $table->string('competition_type');
+            $table->string('competition_type')->nullable();
+            $table->boolean('is_payment_verified');
+            $table->string('role');
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

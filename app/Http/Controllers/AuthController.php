@@ -23,11 +23,23 @@ class AuthController extends Controller
             ]
         );
 
+        $role = "USER";
+        if ($request->input('role') != null) {
+            $role = $request->input('role');
+        }
+
+        $is_payment_verified = false;
+        if ($role == "ADMIN") {
+            $is_payment_verified = true;
+        }
+
         $user = User::query()->create(
             [
                 'email' => $request->input('email'),
                 'username' => $request->input('username'),
                 'competition_type' => $request->input('competition_type'),
+                'is_payment_verified' => $is_payment_verified,
+                'role' => $role,
                 'password' => $request->input('password'),
             ]
         );
@@ -70,6 +82,8 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             'competition_type' => $user->competition_type,
+            'is_payment_verified' => $user->is_payment_verified,
+            'role' => $user->role,
             'expires_at' => now()->addYear(),
         ]);
     }
