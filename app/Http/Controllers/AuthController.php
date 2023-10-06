@@ -16,7 +16,7 @@ class AuthController extends Controller
             [
                 'username' => ['required', 'unique:users,username'],
                 'email' => ['required', 'email', 'unique:users,email'],
-                'competition_type' => ['required', Rule::in(['CRYSTAL','ISOTERM'])],
+                'competition_type' => ['required', Rule::in(['CRYSTAL','ISOTERM','ADMIN'])],
             ],
             [
                 'competition_type.in' => 'competition type must be either CRYSTAL or ISOTERM'
