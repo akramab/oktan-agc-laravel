@@ -30,6 +30,8 @@ class User extends Authenticatable
         'email',
         'username',
         'competition_type',
+        'is_payment_verified',
+        'role',
         'password',
     ];
 
@@ -50,6 +52,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_payment_verified' => 'boolean',
         'password' => 'hashed',
     ];
 
