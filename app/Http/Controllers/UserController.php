@@ -21,10 +21,13 @@ class UserController extends Controller
         error_log('BEFORE FOREACH');
         error_log(count($users));
         foreach($users as $user) {
+            error_reporting('INSIDE FOREACH');
             $institutionName = '';
             if ($user->competition_type == 'ISOTERM') {
+                error_log('INSIDE IF INS NAME');
                 $institutionName = $user->profile->getInstitutionData()->university->name;
             } else {
+                error_log('INSIDE ELSE INS NAME');
                 $institutionName = $user->profile->getInstitutionData()->school->name;
             }
             $institutionInstructor = '';
