@@ -21,7 +21,7 @@ class UserController extends Controller
         error_log('BEFORE FOREACH');
         error_log(count($users));
         foreach($users as $user) {
-            error_reporting('INSIDE FOREACH');
+            error_log('INSIDE FOREACH');
             $institutionName = '';
             if ($user->competition_type == 'ISOTERM') {
                 error_log('INSIDE IF INS NAME');
