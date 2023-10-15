@@ -14,6 +14,7 @@ class UserController extends Controller
             [
                 'id' => 1,
                 'verified' => true,
+                'category' => 'ISOTERM',
                 'date' => $datetime->format(DateTimeInterface::ATOM),
                 'name' => [
                     'team' => 'Tim Elang',
@@ -27,6 +28,7 @@ class UserController extends Controller
             [
                 'id' => 2,
                 'verified' => true,
+                'category' => 'CRYSTAL',
                 'date' => $datetime->format(DateTimeInterface::ATOM),
                 'name' => [
                     'team' => 'Tim Rajawali',
