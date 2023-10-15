@@ -43,7 +43,18 @@ class Profile extends Model
     }
 
     public function getMembersData(): mixed {
-        return json_decode($this->members_data);
+        $membersData = json_decode($this->members_data);
+
+        $membersDataResp = null;
+        if(isset($membersData)) {
+            // sort by id
+            usort($membersData, function($a, $b){
+                return strcmp($a->id, $b->id);
+            });
+            $membersDataResp = $membersData;
+        }
+
+        return $membersDataResp;
     }
 
     public function getInstitutionData(): mixed {

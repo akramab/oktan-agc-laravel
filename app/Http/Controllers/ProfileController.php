@@ -107,14 +107,6 @@ class ProfileController extends Controller
             $institutionData = $userProfile->getInstitutionData();
             $documentsData = $userProfile->getDocumentsData();
 
-            $membersDataResp = null;
-            if(isset($membersData)) {
-                // sort by id
-                usort($membersData, function($a, $b){
-                    return strcmp($a->id, $b->id);
-                });
-                $membersDataResp = $membersData;
-            }
 
             $institutionDataResp = null;
             if(isset($institutionData)) {
@@ -129,7 +121,7 @@ class ProfileController extends Controller
             return response()->json(collect([
                 'team' => $userProfile->team,
                 'sub_theme' => $userProfile->sub_theme,
-                'members' => $membersDataResp,
+                'members' => $membersData,
                 'institution' => $institutionDataResp,
                 'documents' => $documentsDataResp,
             ])->filter());
