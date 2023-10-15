@@ -6,6 +6,7 @@ use App\Models\User;
 use DateTime;
 use DateTimeInterface;
 use Illuminate\Http\Request;
+use function Laravel\Prompts\error;
 
 class UserController extends Controller
 {
@@ -18,6 +19,7 @@ class UserController extends Controller
             ->all();
         $data = [];
         error_log('BEFORE FOREACH');
+        error_log(count($users));
         foreach($users as $user) {
             $institutionName = '';
             if ($user->competition_type == 'ISOTERM') {
