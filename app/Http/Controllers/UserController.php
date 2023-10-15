@@ -10,12 +10,14 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function index(Request $request) {
+        error_log('INSIDE 1');
         $datetime = new DateTime('2010-12-30 23:21:46');
         $users = User::query()
             ->get()
             ->where('role', '=', 'USER')
             ->all();
         $data = [];
+        error_log('BEFORE FOREACH');
         foreach($users as $user) {
             $institutionName = '';
             if ($user->competition_type == 'ISOTERM') {
@@ -29,6 +31,10 @@ class UserController extends Controller
             } else {
                 $institutionInstructor = $user->profile->getInstitutionData()->teacher->name;
             }
+
+            error_log('AFTER ASSIGNEMNT INSIDE FOR EACH');
+            error_log($institutionName);
+            error_log($institutionInstructor);
 
             $data[] = [
                 'id' => $user->id,
@@ -45,6 +51,7 @@ class UserController extends Controller
                 ]
             ];
         }
+        error_log('BEFORE RETURN');
         return response()->json($data);
     }
 }
