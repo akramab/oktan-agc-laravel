@@ -11,24 +11,18 @@ use function Laravel\Prompts\error;
 class UserController extends Controller
 {
     public function index(Request $request) {
-        error_log('INSIDE 1');
         $datetime = new DateTime('2010-12-30 23:21:46');
         $users = User::query()
             ->get()
             ->where('role', '=', 'USER')
             ->all();
         $data = [];
-        error_log('BEFORE FOREACH');
-        error_log(count($users));
         foreach($users as $user) {
             if ($user->profile != null) {
-                error_log('INSIDE FOREACH');
                 $institutionName = '';
                 if ($user->competition_type == 'ISOTERM') {
-                    error_log('INSIDE IF INS NAME');
                     $institutionName = $user->profile->getInstitutionData()->university->name;
                 } else {
-                    error_log('INSIDE ELSE INS NAME');
                     $institutionName = $user->profile->getInstitutionData()->school->name;
                 }
                 $institutionInstructor = '';
@@ -37,10 +31,6 @@ class UserController extends Controller
                 } else {
                     $institutionInstructor = $user->profile->getInstitutionData()->teacher->name;
                 }
-
-                error_log('AFTER ASSIGNEMNT INSIDE FOR EACH');
-                error_log($institutionName);
-                error_log($institutionInstructor);
 
                 $data[] = [
                     'id' => $user->id,
@@ -58,7 +48,6 @@ class UserController extends Controller
                 ];
             }
         }
-        error_log('BEFORE RETURN');
         return response()->json($data);
     }
 }
