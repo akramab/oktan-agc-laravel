@@ -11,7 +11,6 @@ use function Laravel\Prompts\error;
 class UserController extends Controller
 {
     public function index(Request $request) {
-        $datetime = new DateTime('2010-12-30 23:21:46');
         $users = User::query()
             ->get()
             ->where('role', '=', 'USER')
@@ -36,7 +35,7 @@ class UserController extends Controller
                     'id' => $user->id,
                     'verified' => $user->is_payment_verified,
                     'category' => $user->competition_type,
-                    'date' => $datetime->format(DateTimeInterface::ATOM),
+                    'date' => $user->created_at->format(DateTimeInterface::ATOM),
                     'name' => [
                         'team' => $user->profile->team,
                         'member' => $user->profile->getMembersData()[0]->name,
