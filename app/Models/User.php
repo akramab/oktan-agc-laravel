@@ -21,6 +21,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const COMPETITION_CRYSTAL = 'CRYSTAL';
+
+    const COMPETITION_ISOTERM = 'ISOTERM';
     /**
      * The attributes that are mass assignable.
      *

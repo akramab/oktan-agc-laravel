@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -10,70 +11,6 @@ class ProfileController extends Controller
 {
     public function updateOrCreate(Request $request): JsonResponse {
         $currentUser = auth()->user();
-
-        $profileDocuments = [];
-        if ($currentUser->competition_type == 'CRYSTAL') {
-
-            if($request->hasFile('registration_document')) {
-                $regDocPath = $request->file('registration_document')->store('profile_documents');
-                $profileDocuments[] = [
-                    'name' => 'registration',
-                    'path' => $regDocPath
-                ];
-            }
-
-            if($request->hasFile('payment_document')) {
-                $payDocPath = $request->file('payment_document')->store('profile_documents');
-                $profileDocuments[] = [
-                    'name' => 'payment',
-                    'path' => $payDocPath
-                ];
-            }
-        } else if ($currentUser->competition_type == 'ISOTERM') {
-            if($request->hasFile('abstract_1_document')) {
-                $abs1DocPath = $request->file('abstract_1_document')->store('profile_documents');
-                $profileDocuments[] = [
-                    'id' => '1',
-                    'name' => 'abstract',
-                    'path' => $abs1DocPath
-                ];
-            }
-
-            if($request->hasFile('abstract_2_document')) {
-                $abs2DocPath = $request->file('abstract_2_document')->store('profile_documents');
-                $profileDocuments[] = [
-                    'id' => '2',
-                    'name' => 'abstract',
-                    'path' => $abs2DocPath
-                ];
-            }
-
-            if($request->hasFile('work_1_document')) {
-                $work1DocPath = $request->file('work_1_document')->store('profile_documents');
-                $profileDocuments[] = [
-                    'id' => '1',
-                    'name' => 'work',
-                    'path' => $work1DocPath
-                ];
-            }
-
-            if($request->hasFile('work_2_document')) {
-                $work2DocPath = $request->file('work_2_document')->store('profile_documents');
-                $profileDocuments[] = [
-                    'id' => '2',
-                    'name' => 'work',
-                    'path' => $work2DocPath
-                ];
-            }
-
-            if($request->hasFile('unified_document')) {
-                $uniDocPath = $request->file('unified_document')->store('profile_documents');
-                $profileDocuments[] = [
-                    'name' => 'unified_document',
-                    'path' => $uniDocPath
-                ];
-            }
-        }
 
         $profile = Profile::query()->updateOrCreate(
             [
@@ -85,9 +22,36 @@ class ProfileController extends Controller
                 'sub_theme' => $request->input('sub_theme'),
                 'members_data' => $request->input('members_data'),
                 'institution_data' => $request->input('institution_data'),
-                'documents_data' => json_encode($profileDocuments),
             ]
         );
+
+        if($request->hasFile('payment_document')) {
+            $profile->addMediaFromRequest('payment_document')->toMediaCollection(Profile::PAYMENT_DOCUMENT);
+        }
+
+        if($request->hasFile('registration_document')) {
+            $profile->addMediaFromRequest('registration_document')->toMediaCollection(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
+        }
+
+        if($request->hasFile('abstract_1_document')) {
+            $profile->addMediaFromRequest('abstract_1_document')->toMediaCollection(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
+        }
+
+        if($request->hasFile('abstract_2_document')) {
+            $profile->addMediaFromRequest('abstract_2_document')->toMediaCollection(Profile::ISOTERM_ABSTRACT_2_DOCUMENT);
+        }
+
+        if($request->hasFile('work_1_document')) {
+            $profile->addMediaFromRequest('work_1_document')->toMediaCollection(Profile::ISOTERM_WORK_1_DOCUMENT);
+        }
+
+        if($request->hasFile('work_2_document')) {
+            $profile->addMediaFromRequest('work_2_document')->toMediaCollection(Profile::ISOTERM_WORK_2_DOCUMENT);
+        }
+
+        if($request->hasFile('unified_document')) {
+            $profile->addMediaFromRequest('unified_document')->toMediaCollection(Profile::ISOTERM_UNIFIED_DOCUMENT);
+        }
 
         return response()->json([
             'profile_id' => $profile->id,
@@ -105,7 +69,69 @@ class ProfileController extends Controller
         if (isset($userProfile)) {
             $membersData = $userProfile->getMembersData();
             $institutionData = $userProfile->getInstitutionData();
-            $documentsData = $userProfile->getDocumentsData();
+
+            $documentsData = [];
+            if($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
+                $regDocUrl = $userProfile->getFirstMediaUrl(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
+                if ($regDocUrl != '') {
+                    $documentsData[] = [
+                        'name' => 'registration',
+                        'path' => $regDocUrl,
+                    ];
+                }
+
+                $paymentDocUrl = $userProfile->getFirstMediaUrl(Profile::PAYMENT_DOCUMENT);
+                if ($paymentDocUrl != '') {
+                    $documentsData[] = [
+                        'name' => 'payment',
+                        'path' => $paymentDocUrl,
+                    ];
+                }
+            } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
+                $abs1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
+                if ($abs1DocUrl != '') {
+                    $documentsData[] = [
+                        'id' => '1',
+                        'name' => 'abstract',
+                        'path' => $abs1DocUrl,
+                    ];
+                }
+
+                $abs2DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_2_DOCUMENT);
+                if ($abs2DocUrl != '') {
+                    $documentsData[] = [
+                        'id' => '2',
+                        'name' => 'abstract',
+                        'path' => $abs2DocUrl,
+                    ];
+                }
+
+                $work1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_WORK_1_DOCUMENT);
+                if ($work1DocUrl != '') {
+                    $documentsData[] = [
+                        'id' => '1',
+                        'name' => 'work',
+                        'path' => $work1DocUrl,
+                    ];
+                }
+
+                $work2DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_WORK_2_DOCUMENT);
+                if ($work2DocUrl != '') {
+                    $documentsData[] = [
+                        'id' => '2',
+                        'name' => 'work',
+                        'path' => $work2DocUrl,
+                    ];
+                }
+
+                $uniDocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_UNIFIED_DOCUMENT);
+                if ($uniDocUrl != '') {
+                    $documentsData[] = [
+                        'name' => 'unified_document',
+                        'path' => $uniDocUrl,
+                    ];
+                }
+            }
 
 
             $institutionDataResp = null;
