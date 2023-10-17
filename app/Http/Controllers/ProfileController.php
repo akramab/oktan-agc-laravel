@@ -61,18 +61,12 @@ class ProfileController extends Controller
     }
 
     public function get(): JsonResponse {
-        error_log('STARTING POINT');
         $currentUser = auth()->user();
 
-        error_log('CURRENT USER ID');
-        error_log($currentUser->id);
         $userProfile = Profile::query()
-            ->where('id', $currentUser->id)
+            ->where('user_id', $currentUser->id)
             ->first();
 
-        error_log('after query');
-
-        error_log($userProfile);
         if (isset($userProfile)) {
             $membersData = $userProfile->getMembersData();
             $institutionData = $userProfile->getInstitutionData();
@@ -160,7 +154,6 @@ class ProfileController extends Controller
             ])->filter());
         }
 
-        error_log('RETURN NOTHING');
         return response()->json();
     }
 }
