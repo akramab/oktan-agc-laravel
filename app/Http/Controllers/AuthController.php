@@ -78,12 +78,18 @@ class AuthController extends Controller
         $tokenResult = $user->createToken(request('device', 'Unknown Device'));
         $token = $tokenResult->plainTextToken;
 
+        // TODO: still need to add for COMPETITION PASSED
+        $userStatus = 'REGISTERED';
+        if ($user->is_payment_verified) {
+            $userStatus = 'PAYMENT_VERIFIED';
+        }
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
             'competition_type' => $user->competition_type,
             'is_payment_verified' => $user->is_payment_verified,
             'role' => $user->role,
+            'status' => $userStatus,
             'expires_at' => now()->addYear(),
         ]);
     }
