@@ -72,20 +72,21 @@ class ProfileController extends Controller
             $institutionData = $userProfile->getInstitutionData();
 
             $documentsData = [];
+
+            $paymentDocUrl = $userProfile->getFirstMediaUrl(Profile::PAYMENT_DOCUMENT);
+            if ($paymentDocUrl != '') {
+                $documentsData[] = [
+                    'name' => 'payment',
+                    'path' => $paymentDocUrl,
+                ];
+            }
+
             if($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
                 $regDocUrl = $userProfile->getFirstMediaUrl(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
                 if ($regDocUrl != '') {
                     $documentsData[] = [
                         'name' => 'registration',
                         'path' => $regDocUrl,
-                    ];
-                }
-
-                $paymentDocUrl = $userProfile->getFirstMediaUrl(Profile::PAYMENT_DOCUMENT);
-                if ($paymentDocUrl != '') {
-                    $documentsData[] = [
-                        'name' => 'payment',
-                        'path' => $paymentDocUrl,
                     ];
                 }
             } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
