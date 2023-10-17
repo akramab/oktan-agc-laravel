@@ -64,6 +64,8 @@ class ProfileController extends Controller
         error_log('STARTING POINT');
         $currentUser = auth()->user();
 
+        error_log('CURRENT USER ID');
+        error_log($currentUser->id);
         $userProfile = Profile::query()
             ->where('id', $currentUser->id)
             ->first();
