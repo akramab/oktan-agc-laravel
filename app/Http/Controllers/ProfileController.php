@@ -6,6 +6,7 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use function Laravel\Prompts\error;
 
 class ProfileController extends Controller
 {
@@ -60,12 +61,16 @@ class ProfileController extends Controller
     }
 
     public function get(): JsonResponse {
+        error_log('STARTING POINT');
         $currentUser = auth()->user();
 
         $userProfile = Profile::query()
             ->where('id', $currentUser->id)
             ->first();
 
+        error_log('after query');
+
+        error_log($userProfile);
         if (isset($userProfile)) {
             $membersData = $userProfile->getMembersData();
             $institutionData = $userProfile->getInstitutionData();
@@ -153,6 +158,7 @@ class ProfileController extends Controller
             ])->filter());
         }
 
+        error_log('RETURN NOTHING');
         return response()->json();
     }
 }
