@@ -58,6 +58,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => "user payment verified succesfully",
+            'is_payment_verified' => auth()->user()->is_payment_verified,
         ]);
     }
 }
