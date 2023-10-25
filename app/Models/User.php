@@ -24,6 +24,10 @@ class User extends Authenticatable
     const COMPETITION_CRYSTAL = 'CRYSTAL';
 
     const COMPETITION_ISOTERM = 'ISOTERM';
+
+    const STATUS_REGISTERED = 'REGISTERED';
+
+    const STATUS_PAYMENT_VERIFIED = 'PAYMENT_VERIFIED';
     /**
      * The attributes that are mass assignable.
      *

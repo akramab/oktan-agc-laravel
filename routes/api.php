@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/user', 'index')->name('user.get-list');
+        Route::post('/user/verify/{id}', 'verifyPayment')->name('user.verify-payment');
     });
 
     Route::controller(ProfileController::class)->group(function () {

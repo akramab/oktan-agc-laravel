@@ -79,9 +79,9 @@ class AuthController extends Controller
         $token = $tokenResult->plainTextToken;
 
         // TODO: still need to add for COMPETITION PASSED
-        $userStatus = 'REGISTERED';
+        $userStatus = User::STATUS_REGISTERED;
         if ($user->is_payment_verified) {
-            $userStatus = 'PAYMENT_VERIFIED';
+            $userStatus =  User::STATUS_PAYMENT_VERIFIED;
         }
         return response()->json([
             'access_token' => $token,

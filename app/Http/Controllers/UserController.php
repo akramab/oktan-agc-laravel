@@ -6,6 +6,7 @@ use App\Models\User;
 use DateTime;
 use DateTimeInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use function Laravel\Prompts\error;
 
 class UserController extends Controller
@@ -48,5 +49,15 @@ class UserController extends Controller
             }
         }
         return response()->json($data);
+    }
+
+    public function verifyPayment(Request $request) {
+        auth()->user()->update([
+            'is_payment_verified' => true,
+        ]);
+
+        return response()->json([
+            'message' => "user payment verified succesfully",
+        ]);
     }
 }
