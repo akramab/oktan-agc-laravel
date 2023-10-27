@@ -169,11 +169,11 @@ class ProfileController extends Controller
             ->first();
 
         if ($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
-            $regDocUrl = $userProfile->getFirstMediaUrl(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
-            if ($regDocUrl != '') {
+            $regDoc = $userProfile->getFirstMedia(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
+            if ($regDoc != null) {
                 $documentsData[] = [
                     'name' => 'registration',
-                    'path' => $regDocUrl,
+                    'path' => $regDoc->getPath(),
                 ];
             }
         } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
