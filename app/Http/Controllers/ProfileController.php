@@ -161,6 +161,7 @@ class ProfileController extends Controller
 
     public function downloadDocument($id)
     {
+
         $currentUser = User::query()
             ->where('id', $id)
             ->first();
@@ -179,9 +180,9 @@ class ProfileController extends Controller
                     'path' => end($path),
                 ];
 
-                $zip = new ZipArchive();
+                $zip = new \ZipArchive();
                 $fileName = 'zipFile.zip';
-                if ($zip->open(public_path($fileName), ZipArchive::CREATE)== TRUE)
+                if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
                 {
                     $relativeName = basename(end($path));
                     $zip->addFile(end($path), $relativeName);
