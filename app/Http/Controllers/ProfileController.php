@@ -6,7 +6,6 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use ZipArchive;
 use function Laravel\Prompts\error;
 
 class ProfileController extends Controller
