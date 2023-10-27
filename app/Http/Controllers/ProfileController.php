@@ -157,4 +157,62 @@ class ProfileController extends Controller
 
         return response()->json();
     }
+
+    public function downloadDocument($id)
+    {
+        $currentUser = User::query()
+            ->where('id', $id)
+            ->first();
+
+        $userProfile = Profile::query()
+            ->where('user_id', $currentUser->id)
+            ->first();
+
+        if ($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
+            $regDocUrl = $userProfile->getFirstMediaUrl(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
+            if ($regDocUrl != '') {
+                $documentsData[] = [
+                    'name' => 'registration',
+                    'path' => $regDocUrl,
+                ];
+            }
+        } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
+            $abs1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
+            if ($abs1DocUrl != '') {
+                $documentsData[] = [
+                    'id' => '1',
+                    'name' => 'abstract',
+                    'path' => $abs1DocUrl,
+                ];
+            }
+
+            $abs2DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_2_DOCUMENT);
+            if ($abs2DocUrl != '') {
+                $documentsData[] = [
+                    'id' => '2',
+                    'name' => 'abstract',
+                    'path' => $abs2DocUrl,
+                ];
+            }
+
+            $work1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_WORK_1_DOCUMENT);
+            if ($work1DocUrl != '') {
+                $documentsData[] = [
+                    'id' => '1',
+                    'name' => 'work',
+                    'path' => $work1DocUrl,
+                ];
+            }
+
+            $work2DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_WORK_2_DOCUMENT);
+            if ($work2DocUrl != '') {
+                $documentsData[] = [
+                    'id' => '2',
+                    'name' => 'work',
+                    'path' => $work2DocUrl,
+                ];
+            }
+        }
+        return response()->json($documentsData);
+    }
 }

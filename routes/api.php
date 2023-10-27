@@ -35,5 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::controller(ProfileController::class)->group(function () {
         Route::post('/user/profile', 'updateOrCreate')->name('user.update-or-create-profile');
         Route::get('/user/profile', 'get')->name('user.get-profile');
+        Route::get('/user/profile/{id}', 'downloadDocument')->name('user.profile.download-document');
     });
 });
