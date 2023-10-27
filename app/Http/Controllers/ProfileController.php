@@ -6,6 +6,7 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use ZipArchive;
 use function Laravel\Prompts\error;
 
 class ProfileController extends Controller
@@ -171,10 +172,26 @@ class ProfileController extends Controller
         if ($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
             $regDoc = $userProfile->getFirstMedia(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
             if ($regDoc != null) {
+                $path =  explode('/',$regDoc->getPath());
+
                 $documentsData[] = [
                     'name' => 'registration',
-                    'path' => $regDoc->getPath(),
+                    'path' => end($path),
                 ];
+
+//                $zip = new ZipArchive();
+//                $fileName = 'zipFile.zip';
+//                if ($zip->open(public_path($fileName), ZipArchive::CREATE)== TRUE)
+//                {
+//                    $files = File::files(public_path('myFiles'));
+//                    foreach ($files as $key => $value){
+//                        $relativeName = basename($value);
+//                        $zip->addFile($value, $relativeName);
+//                    }
+//                    $zip->close();
+//                }
+//
+//                return response()->download(public_path($fileName));
             }
         } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
             $abs1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
