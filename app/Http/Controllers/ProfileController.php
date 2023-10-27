@@ -179,19 +179,17 @@ class ProfileController extends Controller
                     'path' => end($path),
                 ];
 
-//                $zip = new ZipArchive();
-//                $fileName = 'zipFile.zip';
-//                if ($zip->open(public_path($fileName), ZipArchive::CREATE)== TRUE)
-//                {
-//                    $files = File::files(public_path('myFiles'));
-//                    foreach ($files as $key => $value){
-//                        $relativeName = basename($value);
-//                        $zip->addFile($value, $relativeName);
-//                    }
-//                    $zip->close();
-//                }
-//
-//                return response()->download(public_path($fileName));
+                $zip = new ZipArchive();
+                $fileName = 'zipFile.zip';
+                if ($zip->open(public_path($fileName), ZipArchive::CREATE)== TRUE)
+                {
+                    $relativeName = basename(end($path));
+                    $zip->addFile(end($path), $relativeName);
+
+                    $zip->close();
+                }
+
+                return response()->download(public_path($fileName));
             }
         } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
             $abs1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
