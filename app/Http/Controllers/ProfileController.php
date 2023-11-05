@@ -180,7 +180,7 @@ class ProfileController extends Controller
                 ];
 
                 $zip = new \ZipArchive();
-                $fileName =  uniqid("dokumen-",true). $currentUser->competition_type . "-" . $userProfile->team . '.zip';
+                $fileName =  uniqid("dokumen-",true). "-" . $currentUser->competition_type . "-" . $userProfile->team . '.zip';
               ;
                 if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
                 {
