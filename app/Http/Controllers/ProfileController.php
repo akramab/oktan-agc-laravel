@@ -183,6 +183,7 @@ class ProfileController extends Controller
                 $fileName = 'zipFile.zip';
                 //TEST
                 $relativeName = basename(end($path));
+                $endName = end($path);
                 if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
                 {
                     // $relativeName = basename(end($path));
@@ -193,7 +194,8 @@ class ProfileController extends Controller
 
                 return response()->json(
                     [
-                        'message' => $relativeName
+                        'message' => $relativeName,
+                        'message2' => $endName,
                     ]
                     );
 
