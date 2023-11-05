@@ -186,10 +186,16 @@ class ProfileController extends Controller
                     // $relativeName = basename(end($path));
                     // $zip->addFile(end($path), $relativeName);
 
-                    $zip->close();
                 }
+                $res = $zip->close();
 
-                return response()->download(public_path($fileName));
+                return response()->json(
+                    [
+                        'message' => $res
+                    ]
+                    );
+
+                // return response()->download(public_path($fileName));
             }
         } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
             $abs1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
