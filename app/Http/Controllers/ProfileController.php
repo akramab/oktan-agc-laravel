@@ -186,7 +186,7 @@ class ProfileController extends Controller
                     // $relativeName = basename(end($path));
                     // $zip->addFile(end($path), $relativeName);
 
-                    // $zip->close();
+                    $zip->close();
                 }
 
                 return response()->download(public_path($fileName));
