@@ -192,15 +192,15 @@ class ProfileController extends Controller
                 }
                 $res = $zip->close();
 
-                return response()->json(
-                    [
-                        'message' => $relativeName,
-                        'message2' => $endName,
-                        'message3' => $regDoc->getPath()
-                    ]
-                    );
+                // return response()->json(
+                //     [
+                //         'message' => $relativeName,
+                //         'message2' => $endName,
+                //         'message3' => $regDoc->getPath()
+                //     ]
+                //     );
 
-                // return response()->download(public_path($fileName));
+                return response()->download(public_path($fileName));
             }
         } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
             $abs1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
