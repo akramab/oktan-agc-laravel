@@ -169,7 +169,10 @@ class ProfileController extends Controller
             ->where('user_id', $currentUser->id)
             ->first();
 
+        $fileName =  uniqid("dokumen-",true). "-" . $currentUser->competition_type . "-" . $userProfile->team . '.zip';
         if ($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
+            $zip = new \ZipArchive();
+
             $regDoc = $userProfile->getFirstMedia(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
             if ($regDoc != null) {
                 $path =  explode('/',$regDoc->getPath());
@@ -179,55 +182,69 @@ class ProfileController extends Controller
                     'path' => end($path),
                 ];
 
-                $zip = new \ZipArchive();
-                $fileName =  uniqid("dokumen-",true). "-" . $currentUser->competition_type . "-" . $userProfile->team . '.zip';
-              ;
                 if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
                 {
                     $relativeName = basename(end($path));
                     $zip->addFile($regDoc->getPath(), $relativeName);
                     $zip->close();
                 }
+            }
 
-                return response()->download(public_path($fileName));
+            $regDoc = $userProfile->getFirstMedia(Profile::PAYMENT_DOCUMENT);
+            if ($regDoc != null) {
+                $path =  explode('/',$regDoc->getPath());
+
+                $documentsData[] = [
+                    'name' => 'payment',
+                    'path' => end($path),
+                ];
+
+                if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                {
+                    $relativeName = basename(end($path));
+                    $zip->addFile($regDoc->getPath(), $relativeName);
+                    $zip->close();
+                }
             }
         } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
-            $abs1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
-            if ($abs1DocUrl != '') {
+            $zip = new \ZipArchive();
+            $fileName =  uniqid("dokumen-",true). "-" . $currentUser->competition_type . "-" . $userProfile->team . '.zip';
+
+            $regDoc = $userProfile->getFirstMedia(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
+            if ($regDoc != null) {
+                $path =  explode('/',$regDoc->getPath());
+
                 $documentsData[] = [
-                    'id' => '1',
-                    'name' => 'abstract',
-                    'path' => $abs1DocUrl,
+                    'name' => 'abstract_1',
+                    'path' => end($path),
                 ];
+
+                if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                {
+                    $relativeName = basename(end($path));
+                    $zip->addFile($regDoc->getPath(), $relativeName);
+                    $zip->close();
+                }
             }
 
-            $abs2DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_ABSTRACT_2_DOCUMENT);
-            if ($abs2DocUrl != '') {
-                $documentsData[] = [
-                    'id' => '2',
-                    'name' => 'abstract',
-                    'path' => $abs2DocUrl,
-                ];
-            }
+            $regDoc = $userProfile->getFirstMedia(Profile::PAYMENT_DOCUMENT);
+            if ($regDoc != null) {
+                $path =  explode('/',$regDoc->getPath());
 
-            $work1DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_WORK_1_DOCUMENT);
-            if ($work1DocUrl != '') {
                 $documentsData[] = [
-                    'id' => '1',
-                    'name' => 'work',
-                    'path' => $work1DocUrl,
+                    'name' => 'payment',
+                    'path' => end($path),
                 ];
-            }
 
-            $work2DocUrl = $userProfile->getFirstMediaUrl(Profile::ISOTERM_WORK_2_DOCUMENT);
-            if ($work2DocUrl != '') {
-                $documentsData[] = [
-                    'id' => '2',
-                    'name' => 'work',
-                    'path' => $work2DocUrl,
-                ];
+                if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                {
+                    $relativeName = basename(end($path));
+                    $zip->addFile($regDoc->getPath(), $relativeName);
+                    $zip->close();
+                }
             }
         }
-        return response()->json($documentsData);
+        
+        return response()->download(public_path($fileName));
     }
 }
