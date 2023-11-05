@@ -183,10 +183,10 @@ class ProfileController extends Controller
                 $fileName = 'zipFile.zip';
                 if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
                 {
-                    $relativeName = basename(end($path));
-                    $zip->addFile(end($path), $relativeName);
+                    // $relativeName = basename(end($path));
+                    // $zip->addFile(end($path), $relativeName);
 
-                    $zip->close();
+                    // $zip->close();
                 }
 
                 return response()->download(public_path($fileName));
