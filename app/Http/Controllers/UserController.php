@@ -52,9 +52,12 @@ class UserController extends Controller
         return response()->json($data);
     }
 
-    public function verifyPayment(Request $request) {
-        DB::transaction(function () use ($request) {
-            auth()->user()->update([
+    public function verifyPayment($id) {
+        $user = User::query()
+                ->where('id', $id)
+                ->first();
+        DB::transaction(function () use ($user) {
+            $user->update([
                 'is_payment_verified' => true,
             ]);
         });
@@ -63,7 +66,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => "user payment verified succesfully",
-            'is_payment_verified' => auth()->user()->is_payment_verified,
+            'is_payment_verified' => $user->is_payment_verified,
         ]);
     }
 }
