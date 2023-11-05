@@ -196,6 +196,7 @@ class ProfileController extends Controller
                     [
                         'message' => $relativeName,
                         'message2' => $endName,
+                        'message3' => $regDoc->getPath()
                     ]
                     );
 
