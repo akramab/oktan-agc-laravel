@@ -42,4 +42,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::controller(ProfileController::class)->group(function () {
     Route::get('/user/download/{id}', 'downloadDocument')->name('user.profile.download-document');
+    Route::get('/user/download', 'downloadAllDocuments')->name('user.profile.download-all-documents');
 });
