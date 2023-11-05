@@ -208,7 +208,6 @@ class ProfileController extends Controller
             }
         } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
             $zip = new \ZipArchive();
-            $fileName =  uniqid("dokumen-",true). "-" . $currentUser->competition_type . "-" . $userProfile->team . '.zip';
 
             $regDoc = $userProfile->getFirstMedia(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
             if ($regDoc != null) {
@@ -243,8 +242,25 @@ class ProfileController extends Controller
                     $zip->close();
                 }
             }
+
+            $regDoc = $userProfile->getFirstMedia(Profile::ISOTERM_UNIFIED_DOCUMENT);
+            if ($regDoc != null) {
+                $path =  explode('/',$regDoc->getPath());
+
+                $documentsData[] = [
+                    'name' => 'unified',
+                    'path' => end($path),
+                ];
+
+                if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                {
+                    $relativeName = basename(end($path));
+                    $zip->addFile($regDoc->getPath(), $relativeName);
+                    $zip->close();
+                }
+            }
         }
-        
+
         return response()->download(public_path($fileName));
     }
 }
