@@ -278,103 +278,105 @@ class ProfileController extends Controller
             ->where('user_id', $currentUser->id)
             ->first();
 
-            $fileName =  uniqid("dokumen-",true). "-" . $currentUser->competition_type . "-" . $userProfile->team . '.zip';
-            if ($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
-                $zip = new \ZipArchive();
+            if ($userProfile != null) {
+                $fileName =  uniqid("dokumen-",true). "-" . $currentUser->competition_type . "-" . $userProfile->team . '.zip';
+                if ($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
+                    $zip = new \ZipArchive();
 
-                $regDoc = $userProfile->getFirstMedia(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
-                if ($regDoc != null) {
-                    $path =  explode('/',$regDoc->getPath());
+                    $regDoc = $userProfile->getFirstMedia(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
+                    if ($regDoc != null) {
+                        $path =  explode('/',$regDoc->getPath());
 
-                    $documentsData[] = [
-                        'name' => 'registration',
-                        'path' => end($path),
-                    ];
+                        $documentsData[] = [
+                            'name' => 'registration',
+                            'path' => end($path),
+                        ];
 
-                    if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
-                    {
-                        $relativeName = basename(end($path));
-                        $zip->addFile($regDoc->getPath(), $relativeName);
-                        $zip->close();
+                        if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                        {
+                            $relativeName = basename(end($path));
+                            $zip->addFile($regDoc->getPath(), $relativeName);
+                            $zip->close();
+                        }
+                    }
+
+                    $regDoc = $userProfile->getFirstMedia(Profile::PAYMENT_DOCUMENT);
+                    if ($regDoc != null) {
+                        $path =  explode('/',$regDoc->getPath());
+
+                        $documentsData[] = [
+                            'name' => 'payment',
+                            'path' => end($path),
+                        ];
+
+                        if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                        {
+                            $relativeName = basename(end($path));
+                            $zip->addFile($regDoc->getPath(), $relativeName);
+                            $zip->close();
+                        }
+                    }
+                } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
+                    $zip = new \ZipArchive();
+
+                    $regDoc = $userProfile->getFirstMedia(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
+                    if ($regDoc != null) {
+                        $path =  explode('/',$regDoc->getPath());
+
+                        $documentsData[] = [
+                            'name' => 'abstract_1',
+                            'path' => end($path),
+                        ];
+
+                        if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                        {
+                            $relativeName = basename(end($path));
+                            $zip->addFile($regDoc->getPath(), $relativeName);
+                            $zip->close();
+                        }
+                    }
+
+                    $regDoc = $userProfile->getFirstMedia(Profile::PAYMENT_DOCUMENT);
+                    if ($regDoc != null) {
+                        $path =  explode('/',$regDoc->getPath());
+
+                        $documentsData[] = [
+                            'name' => 'payment',
+                            'path' => end($path),
+                        ];
+
+                        if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                        {
+                            $relativeName = basename(end($path));
+                            $zip->addFile($regDoc->getPath(), $relativeName);
+                            $zip->close();
+                        }
+                    }
+
+                    $regDoc = $userProfile->getFirstMedia(Profile::ISOTERM_UNIFIED_DOCUMENT);
+                    if ($regDoc != null) {
+                        $path =  explode('/',$regDoc->getPath());
+
+                        $documentsData[] = [
+                            'name' => 'unified',
+                            'path' => end($path),
+                        ];
+
+                        if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                        {
+                            $relativeName = basename(end($path));
+                            $zip->addFile($regDoc->getPath(), $relativeName);
+                            $zip->close();
+                        }
                     }
                 }
 
-                $regDoc = $userProfile->getFirstMedia(Profile::PAYMENT_DOCUMENT);
-                if ($regDoc != null) {
-                    $path =  explode('/',$regDoc->getPath());
-
-                    $documentsData[] = [
-                        'name' => 'payment',
-                        'path' => end($path),
-                    ];
-
-                    if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
-                    {
-                        $relativeName = basename(end($path));
-                        $zip->addFile($regDoc->getPath(), $relativeName);
-                        $zip->close();
-                    }
+                if ($zip->open(public_path($globalFileName), \ZipArchive::CREATE)== TRUE)
+                {
+                    $relativeName = basename(end($path));
+                    $zip->addFile(public_path($fileName), $fileName);
+                    $zip->close();
                 }
-            } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
-                $zip = new \ZipArchive();
-
-                $regDoc = $userProfile->getFirstMedia(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
-                if ($regDoc != null) {
-                    $path =  explode('/',$regDoc->getPath());
-
-                    $documentsData[] = [
-                        'name' => 'abstract_1',
-                        'path' => end($path),
-                    ];
-
-                    if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
-                    {
-                        $relativeName = basename(end($path));
-                        $zip->addFile($regDoc->getPath(), $relativeName);
-                        $zip->close();
-                    }
-                }
-
-                $regDoc = $userProfile->getFirstMedia(Profile::PAYMENT_DOCUMENT);
-                if ($regDoc != null) {
-                    $path =  explode('/',$regDoc->getPath());
-
-                    $documentsData[] = [
-                        'name' => 'payment',
-                        'path' => end($path),
-                    ];
-
-                    if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
-                    {
-                        $relativeName = basename(end($path));
-                        $zip->addFile($regDoc->getPath(), $relativeName);
-                        $zip->close();
-                    }
-                }
-
-                $regDoc = $userProfile->getFirstMedia(Profile::ISOTERM_UNIFIED_DOCUMENT);
-                if ($regDoc != null) {
-                    $path =  explode('/',$regDoc->getPath());
-
-                    $documentsData[] = [
-                        'name' => 'unified',
-                        'path' => end($path),
-                    ];
-
-                    if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
-                    {
-                        $relativeName = basename(end($path));
-                        $zip->addFile($regDoc->getPath(), $relativeName);
-                        $zip->close();
-                    }
-                }
-            }
-
-            if ($zip->open(public_path($globalFileName), \ZipArchive::CREATE)== TRUE)
-            {
-                $relativeName = basename(end($path));
-                $zip->addFile(public_path($fileName), $fileName);
-                $zip->close();
             }
         }
 
