@@ -230,12 +230,13 @@ class ProfileController extends Controller
                     $membersData[2]->name, $membersData[2]->year, $membersData[2]->email, $membersData[2]->major, $membersData[2]->wa_number,
                 ],
             ];
+            $xlsxName = 'data-diri-' . $currentUser->competition_type . '-tim-' . $userProfile->team . '.xlsx';
             $xlsx = SimpleXLSXGen::fromArray( $books );
-            $xlsx->saveAs(public_path('books.xlsx'));
+            $xlsx->saveAs(public_path($xlsxName));
 
             if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
             {
-                $zip->addFile(public_path('books.xlsx'), 'books.xlsx');
+                $zip->addFile(public_path($xlsxName), $xlsxName);
                 $zip->close();
             }
             // END OF TEST
