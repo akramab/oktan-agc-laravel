@@ -346,6 +346,37 @@ class ProfileController extends Controller
                 if ($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
                     $zip = new \ZipArchive();
 
+                    //TEST
+                    $membersData = $userProfile->getMembersData();
+                    $institutionData = $userProfile->getInstitutionData();
+
+                    $profileData = [
+                        [
+                            'nama_team',
+                            'sekolah', 'provinsi',
+                            'nama_guru', 'email_guru', 'nomor_wa_guru',
+                            'nama_anggota_1', 'email_anggota_1', 'nomor_wa_anggota_1',
+                            'nama_anggota_2', 'email_anggota_2', 'nomor_wa_anggota_2',
+                        ],
+                        [
+                            $userProfile->team,
+                            $institutionData->school->name, $institutionData->school->province,
+                            $institutionData->teacher->name, $institutionData->teacher->email, $institutionData->teacher->wa_number,
+                            $membersData[0]->name, $membersData[0]->email, $membersData[0]->wa_number,
+                            $membersData[1]->name, $membersData[1]->email, $membersData[1]->wa_number,
+                        ],
+                    ];
+                    $xlsxName = 'data-diri-' . $currentUser->competition_type . '-tim-' . $userProfile->team . '.xlsx';
+                    $xlsx = SimpleXLSXGen::fromArray( $profileData );
+                    $xlsx->saveAs(public_path($xlsxName));
+
+                    if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                    {
+                        $zip->addFile(public_path($xlsxName), $xlsxName);
+                        $zip->close();
+                    }
+                    // END OF TEST
+
                     $regDoc = $userProfile->getFirstMedia(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
                     if ($regDoc != null) {
                         $path =  explode('/',$regDoc->getPath());
@@ -381,6 +412,37 @@ class ProfileController extends Controller
                     }
                 } else if ($currentUser->competition_type == User::COMPETITION_ISOTERM) {
                     $zip = new \ZipArchive();
+
+                    //TEST
+                    $membersData = $userProfile->getMembersData();
+                    $institutionData = $userProfile->getInstitutionData();
+
+                    $profileData = [
+                        [
+                            'nama_team', 'subtema',
+                            'universitas', 'dosen',
+                            'nama_anggota_1', 'tahun_angkatan_anggota_1', 'email_anggota_1', 'jurusan_anggota_1', 'nomor_wa_anggota_1',
+                            'nama_anggota_2', 'tahun_angkatan_anggota_2', 'email_anggota_2', 'jurusan_anggota_2', 'nomor_wa_anggota_2',
+                            'nama_anggota_3', 'tahun_angkatan_anggota_3', 'email_anggota_3', 'jurusan_anggota_3', 'nomor_wa_anggota_3'
+                        ],
+                        [
+                            $userProfile->team, $userProfile->sub_theme,
+                            $institutionData->university->name, $institutionData->university->lecturer,
+                            $membersData[0]->name, $membersData[0]->year, $membersData[0]->email, $membersData[0]->major, $membersData[0]->wa_number,
+                            $membersData[1]->name, $membersData[1]->year, $membersData[1]->email, $membersData[1]->major, $membersData[1]->wa_number,
+                            $membersData[2]->name, $membersData[2]->year, $membersData[2]->email, $membersData[2]->major, $membersData[2]->wa_number,
+                        ],
+                    ];
+                    $xlsxName = 'data-diri-' . $currentUser->competition_type . '-tim-' . $userProfile->team . '.xlsx';
+                    $xlsx = SimpleXLSXGen::fromArray( $profileData );
+                    $xlsx->saveAs(public_path($xlsxName));
+
+                    if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+                    {
+                        $zip->addFile(public_path($xlsxName), $xlsxName);
+                        $zip->close();
+                    }
+                    // END OF TEST
 
                     $regDoc = $userProfile->getFirstMedia(Profile::ISOTERM_ABSTRACT_1_DOCUMENT);
                     if ($regDoc != null) {
