@@ -188,7 +188,7 @@ class ProfileController extends Controller
                 ],
                 [
                     $userProfile->team, $userProfile->sub_theme,
-                    $institutionData['university']->name, $institutionData['university']->lecturer,
+                    $institutionData['university']['name'], $institutionData['university']['lecturer'],
                     $membersData[0]->name, $membersData[0]->year, $membersData[0]->email, $membersData[0]->major, $membersData[0]->wa_number,
                     $membersData[1]->name, $membersData[1]->year, $membersData[1]->email, $membersData[1]->major, $membersData[1]->wa_number,
                     $membersData[2]->name, $membersData[2]->year, $membersData[2]->email, $membersData[2]->major, $membersData[2]->wa_number,
