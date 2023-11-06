@@ -178,6 +178,7 @@ class ProfileController extends Controller
             $membersData = $userProfile->getMembersData();
             $institutionData = $userProfile->getInstitutionData();
 
+            var_dump($institutionData);
             $books = [
                 [
                     'nama_team', 'subtema',
