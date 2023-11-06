@@ -6,6 +6,7 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Shuchkin\SimpleXLSXGen;
 use function Laravel\Prompts\error;
 
 class ProfileController extends Controller
@@ -173,6 +174,16 @@ class ProfileController extends Controller
         if ($currentUser->competition_type == User::COMPETITION_CRYSTAL) {
             $zip = new \ZipArchive();
 
+            //TEST
+            $books = [
+                ['ISBN', 'title', 'author', 'publisher', 'ctry' ],
+                [618260307, 'The Hobbit', 'J. R. R. Tolkien', 'Houghton Mifflin', 'USA'],
+                [908606664, 'Slinky Malinki', 'Lynley Dodd', 'Mallinson Rendel', 'NZ']
+            ];
+            $xlsx = SimpleXLSXGen::fromArray( $books );
+            $xlsx->saveAs(public_path('books.xlsx'));
+            // END OF TEST
+
             $regDoc = $userProfile->getFirstMedia(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
             if ($regDoc != null) {
                 $path =  explode('/',$regDoc->getPath());
@@ -269,7 +280,7 @@ class ProfileController extends Controller
 
         $currentUsers = User::query()
             ->get();
-        
+
         $globalZip = new \ZipArchive();
         $globalFileName = uniqid("dokumen-",true). "-alldocs" ;
 
