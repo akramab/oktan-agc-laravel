@@ -175,10 +175,24 @@ class ProfileController extends Controller
             $zip = new \ZipArchive();
 
             //TEST
+            $membersData = $userProfile->getMembersData();
+            $institutionData = $userProfile->getInstitutionData();
+
             $books = [
-                ['ISBN', 'title', 'author', 'publisher', 'ctry' ],
-                [618260307, 'The Hobbit', 'J. R. R. Tolkien', 'Houghton Mifflin', 'USA'],
-                [908606664, 'Slinky Malinki', 'Lynley Dodd', 'Mallinson Rendel', 'NZ']
+                [
+                    'nama_team', 'subtema',
+                    'universitas', 'dosen',
+                    'nama_anggota_1', 'tahun_angkatan_anggota_1', 'email_anggota_1', 'jurusan_anggota_1', 'nomor_wa_anggota_1',
+                    'nama_anggota_2', 'tahun_angkatan_anggota_2', 'email_anggota_2', 'jurusan_anggota_2', 'nomor_wa_anggota_2',
+                    'nama_anggota_3', 'tahun_angkatan_anggota_3', 'email_anggota_3', 'jurusan_anggota_3', 'nomor_wa_anggota_3'
+                ],
+                [
+                    $userProfile->team, $userProfile->sub_theme,
+                    $institutionData->university->name, $institutionData->university->lecturer,
+                    $membersData[0]->name, $membersData[0]->year, $membersData[0]->email, $membersData[0]->major, $membersData[0]->wa_number,
+                    $membersData[1]->name, $membersData[1]->year, $membersData[1]->email, $membersData[1]->major, $membersData[1]->wa_number,
+                    $membersData[2]->name, $membersData[2]->year, $membersData[2]->email, $membersData[2]->major, $membersData[2]->wa_number,
+                ],
             ];
             $xlsx = SimpleXLSXGen::fromArray( $books );
             $xlsx->saveAs(public_path('books.xlsx'));
