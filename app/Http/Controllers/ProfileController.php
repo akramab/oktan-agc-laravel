@@ -182,6 +182,12 @@ class ProfileController extends Controller
             ];
             $xlsx = SimpleXLSXGen::fromArray( $books );
             $xlsx->saveAs(public_path('books.xlsx'));
+
+            if ($zip->open(public_path($fileName), \ZipArchive::CREATE)== TRUE)
+            {
+                $zip->addFile(public_path('books.xlsx'), 'books.xlsx');
+                $zip->close();
+            }
             // END OF TEST
 
             $regDoc = $userProfile->getFirstMedia(Profile::CRYSTAL_REGISTRATION_DOCUMENT);
